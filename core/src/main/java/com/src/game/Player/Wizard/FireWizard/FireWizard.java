@@ -1,8 +1,8 @@
 package com.src.game.Player.Wizard.FireWizard;
 
 import com.src.game.Enemy.Enemy;
+import com.src.game.Player.AttackAnimation.Weapon.SwordThrust;
 import com.src.game.Player.AttackStrategy.MagicAttack;
-import com.src.game.Player.Weapon.Sword;
 import com.src.game.Player.Wizard.Wizard;
 import com.src.game.Player.Wizard.WizardType;
 
@@ -18,7 +18,7 @@ public class FireWizard extends Wizard {
 
     @Override
     public void createWeapon() {
-        weapon = new Sword();
+        weapon = new SwordThrust();
     }
 
     @Override

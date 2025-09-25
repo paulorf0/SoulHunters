@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.src.game.Enemy.Enemy;
-import com.src.game.Player.Ability.Ability;
-import com.src.game.Player.AttackStrategy.Attack;
+import com.src.game.Player.AttackAnimation.Animable;
+import com.src.game.Player.AttackAnimation.Ability.Ability;
+import com.src.game.Player.AttackAnimation.Weapon.Weapon;
+import com.src.game.Player.AttackStrategy.AttackStrategy;
 import com.src.game.Player.ProtectionStrategy.Protection;
 import com.src.game.Player.State.AttackingState;
 import com.src.game.Player.State.DyingState;
@@ -17,18 +19,20 @@ import com.src.game.Player.State.JumpingState;
 import com.src.game.Player.State.RunningState;
 import com.src.game.Player.State.State;
 import com.src.game.Player.State.WalkingState;
-import com.src.game.Player.Weapon.Weapon;
 import com.src.game.Player.Wizard.WizardType;
 
 // Abstract Factory Pattern
 public abstract class Player extends Sprite {
     protected State state;
-    protected Attack attackStrategy;
-    protected Weapon weapon;
-    protected Ability ability;
+    protected AttackStrategy attackStrategy;
+    protected Animable animableAttack;
     protected Protection protection;
     protected PlayerType type;
 
+    //do i what with this attacks way?
+    protected Weapon weapon; 
+    protected Ability ability;
+    
     protected int width;
     protected int height;
     protected boolean facingRight = true;
@@ -39,10 +43,11 @@ public abstract class Player extends Sprite {
     protected int runningSpeed;
     protected int walkingSpeed;
     protected int jumpSpeed;
-    protected int jumpForce; // Total that player can jump (in pixel's)
+    protected int jumpForce;
     protected float velocityX;
     protected float velocityY;
     protected boolean isJumping;
+    protected boolean isAttacking;
 
     protected int intelligencePoints;
     protected int strengthPoints;
@@ -209,7 +214,7 @@ public abstract class Player extends Sprite {
         return state;
     }
 
-    public Attack getAttackStrategy() {
+    public AttackStrategy getAttackStrategy() {
         return attackStrategy;
     }
 
@@ -249,6 +254,15 @@ public abstract class Player extends Sprite {
         return stateTime;
     }
 
+    public boolean getIsAttacking() {
+        return isAttacking;
+    }
+
+    public void setIsAttacking(boolean isAttacking) {
+        this.isAttacking = isAttacking;
+    }
+
+
     public void setState(State newState) {
         if (state != null && newState.getClass().equals(state.getClass()))
             return;
@@ -256,7 +270,7 @@ public abstract class Player extends Sprite {
         state.enterState(this);
     }
 
-    public void setAttackStrategy(Attack attackStrategy) {
+    public void setAttackStrategy(AttackStrategy attackStrategy) {
         this.attackStrategy = attackStrategy;
     }
 
@@ -355,8 +369,127 @@ public abstract class Player extends Sprite {
         return velocityY;
     }
 
-    public boolean getIsJumping(){
+    public boolean getIsJumping() {
         return isJumping;
     }
+
+    public Animable getAnimableAttack() {
+        return animableAttack;
+    }
+
+    public void setAnimableAttack(Animable animableAttack) {
+        this.animableAttack = animableAttack;
+    }
+
+    public Protection getProtection() {
+        return protection;
+    }
+
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public boolean isFacingRight() {
+        return facingRight;
+    }
+
+    public void setXp(float xp) {
+        this.xp = xp;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public void setRunningSpeed(int runningSpeed) {
+        this.runningSpeed = runningSpeed;
+    }
+
+    public void setWalkingSpeed(int walkingSpeed) {
+        this.walkingSpeed = walkingSpeed;
+    }
+
+    public void setJumpSpeed(int jumpSpeed) {
+        this.jumpSpeed = jumpSpeed;
+    }
+
+    public void setJumpForce(int jumpForce) {
+        this.jumpForce = jumpForce;
+    }
+
+    public void setJumping(boolean isJumping) {
+        this.isJumping = isJumping;
+    }
+
+    public void setAttacking(boolean isAttacking) {
+        this.isAttacking = isAttacking;
+    }
+
+    public Texture getTexture() {
+        return texture;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+    }
+
+    public Animation<TextureRegion> getAnimation() {
+        return animation;
+    }
+
+    public void setAnimation(Animation<TextureRegion> animation) {
+        this.animation = animation;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
+    public int getScreen_width() {
+        return screen_width;
+    }
+
+    public void setScreen_width(int screen_width) {
+        this.screen_width = screen_width;
+    }
+
+    public int getScreen_height() {
+        return screen_height;
+    }
+
+    public void setScreen_height(int screen_height) {
+        this.screen_height = screen_height;
+    }
+
+    public void setAttackingState(AttackingState attackingState) {
+        this.attackingState = attackingState;
+    }
+
+    public void setDyingState(DyingState dyingState) {
+        this.dyingState = dyingState;
+    }
+
+    public void setIdleState(IdleState idleState) {
+        this.idleState = idleState;
+    }
+
+    public void setRunningState(RunningState runningState) {
+        this.runningState = runningState;
+    }
+
+    public void setWalkingState(WalkingState walkingState) {
+        this.walkingState = walkingState;
+    }
+
+    public void setJumpingState(JumpingState jumpingState) {
+        this.jumpingState = jumpingState;
+    }
+
+    
 
 }
