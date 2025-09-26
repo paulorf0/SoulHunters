@@ -25,14 +25,14 @@ import com.src.game.Player.Wizard.WizardType;
 public abstract class Player extends Sprite {
     protected State state;
     protected AttackStrategy attackStrategy;
-    protected Animable animableAttack;
+    protected Animable currentAnimableAttack;
     protected Protection protection;
     protected PlayerType type;
 
-    //do i what with this attacks way?
-    protected Weapon weapon; 
+    // What do I do with these attack classes?
+    protected Weapon weapon;
     protected Ability ability;
-    
+
     protected int width;
     protected int height;
     protected boolean facingRight = true;
@@ -262,7 +262,6 @@ public abstract class Player extends Sprite {
         this.isAttacking = isAttacking;
     }
 
-
     public void setState(State newState) {
         if (state != null && newState.getClass().equals(state.getClass()))
             return;
@@ -373,18 +372,17 @@ public abstract class Player extends Sprite {
         return isJumping;
     }
 
-    public Animable getAnimableAttack() {
-        return animableAttack;
+    public Animable getCurrentAnimableAttack() {
+        return currentAnimableAttack;
     }
 
-    public void setAnimableAttack(Animable animableAttack) {
-        this.animableAttack = animableAttack;
+    public void setCurrentAnimableAttack(Animable animableAttack) {
+        this.currentAnimableAttack = animableAttack;
     }
 
     public Protection getProtection() {
         return protection;
     }
-
 
     public void setWidth(int width) {
         this.width = width;
@@ -490,6 +488,9 @@ public abstract class Player extends Sprite {
         this.jumpingState = jumpingState;
     }
 
-    
+    public void resetAttack(){
+        ability = null;
+        weapon = null;
+    }
 
 }

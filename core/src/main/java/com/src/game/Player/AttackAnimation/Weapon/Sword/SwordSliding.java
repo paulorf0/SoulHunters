@@ -1,12 +1,12 @@
-package com.src.game.Player.AttackAnimation.Weapon;
+package com.src.game.Player.AttackAnimation.Weapon.Sword;
 
 import com.src.game.Player.Player;
 import com.src.game.Player.Wizard.WizardConfig;
 
-public class SwordSliding extends Weapon {
+public class SwordSliding extends SwordWeapon {
     private final float duration = 0.1f;
 
-    public SwordSliding(){
+    public SwordSliding() {
         super();
     }
 
@@ -15,7 +15,7 @@ public class SwordSliding extends Weapon {
         WizardConfig inf = (WizardConfig) player.getType().getBaseConfig();
 
         player.loadTexture(inf.getPath() + "SwordSliding.png");
-        player.loadAnimation(duration, inf.getFire_wizard_sword_sliding_col(), inf.getFire_wizard_sword_sliding_row());
+        player.loadAnimation(duration, inf.getSwordSlidingCol(), inf.getSwordSlidingRow());
     }
 
 }

@@ -8,15 +8,18 @@ public class AttackingState extends State {
         player.nextStateTime();
         player.setRegionTexture(false);
 
-        if(player.isAnimationFinished()){
+        if (player.isAnimationFinished()) {
+            player.setIsAttacking(false);
             player.setState(player.getIdleState());
+            player.resetAttack();
         }
     }
 
     @Override
     public void enterState(Player player) {
+        player.setIsAttacking(false);
         player.resetStateTime();
-        player.getAnimableAttack().loadAnimation(player);
+        player.getCurrentAnimableAttack().loadAnimation(player);
     }
 
 }

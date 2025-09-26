@@ -26,12 +26,24 @@ public interface WizardConfig {
     public int getJumpCol();
 
     public int getJumpRow();
-    
-    public int getFire_wizard_sword_thrust_col();
 
-    public int getFire_wizard_sword_thrust_row();
-    public int getFire_wizard_sword_sliding_col();
+    public int getSwordThrustCol();
 
-    public int getFire_wizard_sword_sliding_row();
+    public int getSwordThrustRow();
 
+    public int getSwordSlidingCol();
+
+    public int getSwordSlidingRow();
+
+    public int getFlameJetCol();
+
+    public int getFlameJetRow();
+
+    public int getFireballCol();
+
+    public int getFireballRow();
+
+    public int getChargeCol();
+
+    public int getChargeRow();
 }

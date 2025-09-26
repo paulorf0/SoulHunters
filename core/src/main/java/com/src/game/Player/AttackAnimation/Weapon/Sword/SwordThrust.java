@@ -1,9 +1,9 @@
-package com.src.game.Player.AttackAnimation.Weapon;
+package com.src.game.Player.AttackAnimation.Weapon.Sword;
 
 import com.src.game.Player.Player;
 import com.src.game.Player.Wizard.WizardConfig;
 
-public class SwordThrust extends Weapon {
+public class SwordThrust extends SwordWeapon {
     private final float duration = 0.2f;
 
     public SwordThrust() {
@@ -15,6 +15,6 @@ public class SwordThrust extends Weapon {
         WizardConfig inf = (WizardConfig) player.getType().getBaseConfig();
 
         player.loadTexture(inf.getPath() + "SwordThrust.png");
-        player.loadAnimation(duration, inf.getFire_wizard_sword_thrust_col(), inf.getFire_wizard_sword_thrust_row());
+        player.loadAnimation(duration, inf.getSwordThrustCol(), inf.getSwordThrustRow());
     }
 }

@@ -3,7 +3,10 @@ package com.src.game.Player.State;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.src.game.Player.Player;
-import com.src.game.Player.AttackAnimation.AttackAnimationSingleton;
+import com.src.game.Player.AttackAnimation.AttackAnimationFactory;
+import com.src.game.Player.AttackAnimation.Ability.Ability;
+import com.src.game.Player.AttackAnimation.Weapon.Weapon;
+import com.src.game.Player.AttackStrategy.AttackStrategy;
 
 public abstract class State {
 
@@ -20,30 +23,62 @@ public abstract class State {
         boolean movingD = Gdx.input.isKeyPressed(Input.Keys.D);
         boolean jumping = Gdx.input.isKeyPressed(Input.Keys.SPACE);
 
-        // Attacks
+        // Weapon Attacks
         boolean lungeAttack = Gdx.input.isKeyJustPressed(Input.Keys.E);
         boolean slidingAttack = Gdx.input.isButtonJustPressed(Input.Buttons.LEFT);
 
-        boolean moving = movingA || movingD || jumping || lungeAttack || slidingAttack;
+        // Ability Attacks
+        boolean jetAttack = Gdx.input.isKeyJustPressed(Input.Keys.R);
+        boolean chargeAttack = Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT);
+
+        boolean weaponAttack = lungeAttack || slidingAttack;
+        boolean abilityAttack = jetAttack || chargeAttack;
+
+        boolean moving = movingA || movingD || jumping;
         boolean sprint = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
 
         boolean stopMovement = player.getIsJumping();
         boolean stopAttack = player.getIsAttacking();
 
         boolean stop = stopMovement || stopAttack;
+        boolean movement = moving || weaponAttack || abilityAttack;
 
         State movementState = sprint ? player.getRunningState() : player.getWalkingState();
 
-        if (moving) {
+        if (movement) {
             if (!stop) {
                 if (lungeAttack) {
-                    player.setAnimableAttack(AttackAnimationSingleton.getLungeAttack());
+                    Weapon weapon = AttackAnimationFactory.getLungeAttack();
+
+                    player.setCurrentAnimableAttack(weapon);
+                    player.setWeapon(weapon);
                     player.setState(player.getAttackingState());
                     return;
                 }
 
                 if (slidingAttack) {
-                    player.setAnimableAttack(AttackAnimationSingleton.getSlidingAttack());
+                    Weapon weapon = AttackAnimationFactory.getSlidingAttack();
+
+                    player.setCurrentAnimableAttack(weapon);
+                    player.setWeapon(weapon);
+                    player.setState(player.getAttackingState());
+                    return;
+                }
+
+                if (jetAttack) {
+                    Ability ability = AttackAnimationFactory.getJetAttack(player.getType());
+
+                    player.setCurrentAnimableAttack(ability);
+                    player.setAbility(ability);
+                    player.setState(player.getAttackingState());
+                    return;
+                }
+
+                if (chargeAttack) {
+                    Ability ability = AttackAnimationFactory.getChargeAttack(player.getType());
+
+                    player.setCurrentAnimableAttack(ability);
+                    player.setAbility(ability);
                     player.setState(player.getAttackingState());
                     return;
                 }
