@@ -1,6 +1,6 @@
-package com.src.game.Player.Wizard;
+package com.src.game;
 
-public interface WizardConfig {
+public interface EntityConfig {
     public String getPath();
 
     public int getIdleCol();

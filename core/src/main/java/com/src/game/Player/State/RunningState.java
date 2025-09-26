@@ -1,7 +1,7 @@
 package com.src.game.Player.State;
 
+import com.src.game.EntityConfig;
 import com.src.game.Player.Player;
-import com.src.game.Player.Wizard.WizardConfig;
 
 public class RunningState extends State {
     private final float duration = 0.1f;
@@ -19,7 +19,7 @@ public class RunningState extends State {
 
         player.resetStateTime();
 
-        WizardConfig inf = (WizardConfig) player.getType().getBaseConfig();
+        EntityConfig inf = (EntityConfig) player.getType().getBaseConfig();
 
         player.loadTexture(inf.getPath() + "Run.png");
         player.loadAnimation(duration, inf.getRunningCol(), inf.getRunningRow());

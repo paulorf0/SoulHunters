@@ -1,8 +1,8 @@
 package com.src.game.Player.Wizard.FireWizard;
 
-import com.src.game.Player.Wizard.WizardConfig;
+import com.src.game.EntityConfig;
 
-public class FireWizardConfig implements WizardConfig {
+public class FireWizardConfig implements EntityConfig {
     private final String fire_wizard = "Player/FireWizard/";
 
     private final int idle_col = 7;

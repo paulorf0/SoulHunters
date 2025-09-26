@@ -15,7 +15,7 @@ public class SoulHunters extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         player = new FireWizard();
-        player.setPosition(200,200);
+        player.setPosition(500,100);
     }
 
     @Override

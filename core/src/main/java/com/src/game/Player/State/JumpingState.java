@@ -1,9 +1,9 @@
 package com.src.game.Player.State;
 
 import com.badlogic.gdx.Gdx;
+import com.src.game.EntityConfig;
 import com.src.game.config;
 import com.src.game.Player.Player;
-import com.src.game.Player.Wizard.WizardConfig;
 
 public class JumpingState extends State {
     private final float gravity = -5f;
@@ -55,7 +55,7 @@ public class JumpingState extends State {
         // Duração de cada frame. Ajuste para controlar a velocidade da animação.
         float frameDuration = 0.1f;
 
-        WizardConfig inf = (WizardConfig) player.getType().getBaseConfig();
+        EntityConfig inf = (EntityConfig) player.getType().getBaseConfig();
         player.loadTexture(inf.getPath() + "Jump.png");
         player.loadAnimation(frameDuration, inf.getJumpCol(), inf.getJumpRow());
 

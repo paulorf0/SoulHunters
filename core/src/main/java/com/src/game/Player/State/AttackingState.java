@@ -5,6 +5,9 @@ import com.src.game.Player.Player;
 public class AttackingState extends State {
     @Override
     public void update(Player player) {
+        // player.getCurrentAnimableAttack();
+        // if(player.getStamina())
+
         player.nextStateTime();
         player.setRegionTexture(false);
 
@@ -17,9 +20,8 @@ public class AttackingState extends State {
 
     @Override
     public void enterState(Player player) {
-        player.setIsAttacking(false);
+        player.setIsAttacking(true);
         player.resetStateTime();
         player.getCurrentAnimableAttack().loadAnimation(player);
     }
-
 }

@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.src.game.Enemy.Enemy;
+import com.src.game.EntityTypeInterface;
+import com.src.game.GameEntity;
 import com.src.game.Player.AttackAnimation.Animable;
-import com.src.game.Player.AttackAnimation.Ability.Ability;
+import com.src.game.Player.AttackAnimation.Ability.Skill;
 import com.src.game.Player.AttackAnimation.Weapon.Weapon;
 import com.src.game.Player.AttackStrategy.AttackStrategy;
 import com.src.game.Player.ProtectionStrategy.Protection;
@@ -19,38 +19,30 @@ import com.src.game.Player.State.JumpingState;
 import com.src.game.Player.State.RunningState;
 import com.src.game.Player.State.State;
 import com.src.game.Player.State.WalkingState;
-import com.src.game.Player.Wizard.WizardType;
 
 // Abstract Factory Pattern
-public abstract class Player extends Sprite {
+public abstract class Player extends GameEntity {
     protected State state;
     protected AttackStrategy attackStrategy;
     protected Animable currentAnimableAttack;
     protected Protection protection;
-    protected PlayerType type;
 
     // What do I do with these attack classes?
     protected Weapon weapon;
-    protected Ability ability;
-
-    protected int width;
-    protected int height;
-    protected boolean facingRight = true;
+    protected Skill ability;
+    protected ObjectPool pool;
 
     protected float xp;
     protected int level;
     protected float life;
+    protected int throwableObjectsLimit;
     protected int runningSpeed;
     protected int walkingSpeed;
     protected int jumpSpeed;
     protected int jumpForce;
-    protected float velocityX;
-    protected float velocityY;
+
     protected boolean isJumping;
     protected boolean isAttacking;
-
-    protected int intelligencePoints;
-    protected int strengthPoints;
 
     protected Texture texture;
     protected Animation<TextureRegion> animation;
@@ -67,25 +59,19 @@ public abstract class Player extends Sprite {
     protected WalkingState walkingState;
     protected JumpingState jumpingState;
 
-    protected Player(WizardType type, int width, int height) {
-        super();
+    protected Player(EntityTypeInterface type, int width, int height) {
+        super(type, width, height);
+
+        // Attributes
         xp = 0.f;
         level = 1;
         life = 10;
-
-        intelligencePoints = 1;
-        strengthPoints = 1;
 
         runningSpeed = 5;
         walkingSpeed = 2;
         jumpSpeed = 2;
         jumpForce = 6;
-
-        screen_width = Gdx.graphics.getWidth();
-        screen_height = Gdx.graphics.getHeight();
-
-        this.width = width;
-        this.height = height;
+        throwableObjectsLimit = 5;
 
         // Initialize states
         attackingState = new AttackingState();
@@ -95,19 +81,18 @@ public abstract class Player extends Sprite {
         walkingState = new WalkingState();
         jumpingState = new JumpingState();
 
+        // State Attributes
         isJumping = false;
+        isAttacking = false;
 
-        setType(type);
+        screen_width = Gdx.graphics.getWidth();
+        screen_height = Gdx.graphics.getHeight();
+
         setState(idleState);
+
+        // Pool
+        pool = new ObjectPool(this);
     }
-
-    public abstract void createWeapon();
-
-    public abstract void createAbility();
-
-    public abstract void takeDamage(int amount);
-
-    public abstract void attack(Enemy enemy);
 
     public void update() {
         state.update(this);
@@ -132,79 +117,6 @@ public abstract class Player extends Sprite {
         }
     }
 
-    public void loadTexture(String path) {
-        texture = new Texture(path);
-    }
-
-    public void loadAnimation(float duration, int frame_col, int frame_row) {
-        // https://libgdx.com/wiki/graphics/2d/2d-animation
-        if (texture == null)
-            return;
-        if (duration <= 0)
-            duration = .7f; // default.
-
-        TextureRegion[][] tmp = TextureRegion.split(texture,
-                texture.getWidth() / frame_col,
-                texture.getHeight() / frame_row);
-
-        TextureRegion[] frames = new TextureRegion[frame_col * frame_row];
-        int index = 0;
-        for (int i = 0; i < frame_row; i++) {
-            for (int j = 0; j < frame_col; j++) {
-                frames[index++] = tmp[i][j];
-            }
-        }
-
-        animation = new Animation<TextureRegion>(duration, frames);
-        setSize(width, height);
-    }
-
-    public int getCurrentFrameIndex() {
-        if (animation == null) {
-            return 0;
-        }
-        return animation.getKeyFrameIndex(stateTime);
-    }
-
-    public boolean isAnimationFinished() {
-        if (animation == null) {
-            return true;
-        }
-        return animation.isAnimationFinished(stateTime);
-    }
-
-    public void updateSpriteDirection() {
-        if (facingRight && isFlipX()) {
-            flip(true, false);
-        } else if (!facingRight && !isFlipX()) {
-            flip(true, false);
-        }
-    }
-
-    public void wallCollision() {
-        int max_x = screen_width - width / 2;
-        if (getX() > max_x) {
-            setPosition(max_x, getY());
-        }
-
-        int min_x = 0 - width / 2;
-        if (getX() < min_x) {
-            setPosition(min_x, getY());
-        }
-    }
-
-    public void resetStateTime() {
-        stateTime = 0.f;
-    }
-
-    public void nextStateTime() {
-        stateTime += Gdx.graphics.getDeltaTime();
-    }
-
-    public void setRegionTexture(boolean repeat) {
-        setRegion(animation.getKeyFrame(stateTime, repeat));
-    }
-
     public void dispose() {
         if (texture != null)
             texture.dispose();
@@ -222,11 +134,11 @@ public abstract class Player extends Sprite {
         return weapon;
     }
 
-    public Ability getAbility() {
+    public Skill getAbility() {
         return ability;
     }
 
-    public PlayerType getType() {
+    public EntityTypeInterface getType() {
         return type;
     }
 
@@ -243,11 +155,7 @@ public abstract class Player extends Sprite {
     }
 
     public int getIntelligencePoints() {
-        return intelligencePoints;
-    }
-
-    public int getStrengthPoints() {
-        return strengthPoints;
+        return intelligence;
     }
 
     public float getStateTime() {
@@ -277,7 +185,7 @@ public abstract class Player extends Sprite {
         this.weapon = weapon;
     }
 
-    public void setAbility(Ability ability) {
+    public void setAbility(Skill ability) {
         this.ability = ability;
     }
 
@@ -290,14 +198,10 @@ public abstract class Player extends Sprite {
     }
 
     public void setIntelligencePoints(int intelligencePoints) {
-        this.intelligencePoints = intelligencePoints;
+        this.intelligence = intelligencePoints;
     }
 
-    public void setStrengthPoints(int strengthPoints) {
-        this.strengthPoints = strengthPoints;
-    }
-
-    public void setType(PlayerType type) {
+    public void setType(EntityTypeInterface type) {
         this.type = type;
     }
 
@@ -488,9 +392,24 @@ public abstract class Player extends Sprite {
         this.jumpingState = jumpingState;
     }
 
-    public void resetAttack(){
+    public void resetAttack() {
         ability = null;
         weapon = null;
     }
 
+    public void setPool(ObjectPool pool) {
+        this.pool = pool;
+    }
+
+    public ObjectPool getPool() {
+        return pool;
+    }
+
+    public void setThrowableObjectsLimit(int throwableObjectsLimit) {
+        this.throwableObjectsLimit = throwableObjectsLimit;
+    }
+
+    public int getThrowableObjectsLimit() {
+        return throwableObjectsLimit;
+    }
 }

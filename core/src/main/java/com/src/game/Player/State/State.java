@@ -4,9 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.src.game.Player.Player;
 import com.src.game.Player.AttackAnimation.AttackAnimationFactory;
-import com.src.game.Player.AttackAnimation.Ability.Ability;
+import com.src.game.Player.AttackAnimation.Ability.Skill;
 import com.src.game.Player.AttackAnimation.Weapon.Weapon;
-import com.src.game.Player.AttackStrategy.AttackStrategy;
 
 public abstract class State {
 
@@ -66,7 +65,7 @@ public abstract class State {
                 }
 
                 if (jetAttack) {
-                    Ability ability = AttackAnimationFactory.getJetAttack(player.getType());
+                    Skill ability = AttackAnimationFactory.getJetAttack(player.getType());
 
                     player.setCurrentAnimableAttack(ability);
                     player.setAbility(ability);
@@ -75,7 +74,7 @@ public abstract class State {
                 }
 
                 if (chargeAttack) {
-                    Ability ability = AttackAnimationFactory.getChargeAttack(player.getType());
+                    Skill ability = AttackAnimationFactory.getChargeAttack(player.getType());
 
                     player.setCurrentAnimableAttack(ability);
                     player.setAbility(ability);
