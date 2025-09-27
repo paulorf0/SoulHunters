@@ -6,6 +6,7 @@ import com.src.game.Player.Player;
 import com.src.game.Player.AttackAnimation.AttackAnimationFactory;
 import com.src.game.Player.AttackAnimation.Ability.Skill;
 import com.src.game.Player.AttackAnimation.Weapon.Weapon;
+import com.src.game.ThrowableObjects.ThrowableObject;
 
 public abstract class State {
 
@@ -76,6 +77,8 @@ public abstract class State {
                 if (chargeAttack) {
                     Skill ability = AttackAnimationFactory.getChargeAttack(player.getType());
 
+                    for(ThrowableObject to : player.getPool())
+                
                     player.setCurrentAnimableAttack(ability);
                     player.setAbility(ability);
                     player.setState(player.getAttackingState());

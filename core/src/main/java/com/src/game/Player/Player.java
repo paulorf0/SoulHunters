@@ -98,7 +98,9 @@ public abstract class Player extends GameEntity {
         state.update(this);
 
         updateSpriteDirection();
-        wallCollision();
+
+        
+        threatWallCollision();
     }
 
     public void handleInput() {

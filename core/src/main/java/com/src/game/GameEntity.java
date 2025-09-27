@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class GameEntity extends Sprite {
-    private boolean isAlive;
+    protected boolean isAlive;
     protected boolean facingRight = true;
     protected float velocityX;
     protected float velocityY;
@@ -43,16 +43,31 @@ public abstract class GameEntity extends Sprite {
         screen_width = Gdx.graphics.getWidth();
     }
 
-    public void wallCollision() {
-        int max_x = screen_width - width / 2;
+    // Collision with left wall = -1
+    // Collision with right wall = 1
+    // No Collision = 0
+    public int wallCollision(int max_x, int min_x) {
         if (getX() > max_x) {
-            setPosition(max_x, getY());
+            return 1;
         }
 
-        int min_x = 0 - width / 2;
         if (getX() < min_x) {
-            setPosition(min_x, getY());
+            return -1;
         }
+
+        return 0;
+    }
+
+    public void threatWallCollision() {
+        int max_x = screen_width - width / 2;
+        int min_x = 0 - width / 2;
+
+        int side = wallCollision(max_x, min_x);
+
+        if (side == 1)
+            setPosition(max_x, getY());
+        if (side == -1)
+            setPosition(min_x, getY());
     }
 
     public void loadTexture(String path) {
@@ -174,6 +189,66 @@ public abstract class GameEntity extends Sprite {
 
     public void setScreen_width(int screen_width) {
         this.screen_width = screen_width;
+    }
+
+    public boolean isFacingRight() {
+        return facingRight;
+    }
+
+    public void setFacingRight(boolean facingRight) {
+        this.facingRight = facingRight;
+    }
+
+    public float getVelocityX() {
+        return velocityX;
+    }
+
+    public void setVelocityX(float velocityX) {
+        this.velocityX = velocityX;
+    }
+
+    public float getVelocityY() {
+        return velocityY;
+    }
+
+    public void setVelocityY(float velocityY) {
+        this.velocityY = velocityY;
+    }
+
+    public int getMana() {
+        return mana;
+    }
+
+    public void setMana(int mana) {
+        this.mana = mana;
+    }
+
+    public int getStrengh() {
+        return strengh;
+    }
+
+    public void setStrengh(int strengh) {
+        this.strengh = strengh;
+    }
+
+    public int getIntelligence() {
+        return intelligence;
+    }
+
+    public void setIntelligence(int intelligence) {
+        this.intelligence = intelligence;
+    }
+
+    public EntityTypeInterface getType() {
+        return type;
+    }
+
+    public void setType(EntityTypeInterface type) {
+        this.type = type;
+    }
+
+    public boolean getFacingRight() {
+        return facingRight;
     }
 
 }
